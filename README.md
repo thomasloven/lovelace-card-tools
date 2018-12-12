@@ -186,7 +186,7 @@ This lets you parse a user specified template like `[[ light.bed_light.state ]]`
 
 Two things are important:
 
-- The template must start with `[[<space>` and end with `<space>]]`
+- Template must start with `[[<space>` and end with `<space>]]`
 - This is not in any way the same kind of template as used in the Home Assistant configuration
 
 The templates are parsed by reading one step at a time from the `hass.states` object.
@@ -199,5 +199,4 @@ Next is one of:
 - `last_changed`
 - `last_updated`
 
-If the string does not match the template format, the original string is returned.
-Otherwise the requested value is returned, or an error message on failure.
+The function replaces any template found in the supplied string with the requested value, or an error message on failure.

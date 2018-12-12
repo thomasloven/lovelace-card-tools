@@ -178,20 +178,22 @@ if (!window.cardTools){
     };
 
   cardTools.parseTemplate =
-    (str) => {
-      if(!str || !str.startsWith('[[ ') || !str.endsWith(' ]]'))
-        return str;
-      try {
-        str = str.replace(/^\[\[\s+|\s+\]\]$/g, '')
-        const parts = str.split(".");
-        let v = cardTools.hass.states[`${parts[0]}.${parts[1]}`];
-        parts.shift();
-        parts.shift();
-        parts.forEach(item => v = v[item]);
-        return v;
-      } catch {
-        return `[[ Template matching failed ${str} ]]`;
+    (text, error) => {
+      const _parse = (str) => {
+        try {
+          str = str.replace(/^\[\[\s+|\s+\]\]$/g, '')
+          const parts = str.split(".");
+          let v = cardTools.hass.states[`${parts[0]}.${parts[1]}`];
+          parts.shift();
+          parts.shift();
+          parts.forEach(item => v = v[item]);
+          return v;
+        } catch {
+          return error || `[[ Template matching failed ${str} ]]`;
+        }
       }
+      text = text.replace(/(\[\[\s.*?\s\]\])/g, (str, p1, offset, s) => _parse(str));
+      return text;
     }
 
   window.cardTools = cardTools;
