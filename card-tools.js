@@ -1,5 +1,5 @@
 if (!window.cardTools){
-  const version = 0.1;
+  const version = 0.2;
   const CUSTOM_TYPE_PREFIX = "custom:";
 
   let cardTools =
@@ -176,6 +176,23 @@ if (!window.cardTools){
       });
       return element;
     };
+
+  cardTools.parseTemplate =
+    (str) => {
+      if(!str || !str.startsWith('[[ ') || !str.endsWith(' ]]'))
+        return str;
+      try {
+        str = str.replace(/^\[\[\s+|\s+\]\]$/g, '')
+        const parts = str.split(".");
+        let v = cardTools.hass.states[`${parts[0]}.${parts[1]}`];
+        parts.shift();
+        parts.shift();
+        parts.forEach(item => v = v[item]);
+        return v;
+      } catch {
+        return `[[ Template matching failed ${str} ]]`;
+      }
+    }
 
   window.cardTools = cardTools;
   cardTools.fireEvent("rebuild-view");

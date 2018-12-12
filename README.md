@@ -49,7 +49,8 @@ The following functions and variables are defined:
 | `window.cardTools.createEntityRow(config)` | 0.1 | Creates and sets up an `entities` row based on `config` |
 | `window.cardTools.deviceID` | 0.1 | Kind of unique and kind of persistent identifier for the browser viewing the page |
 | `window.cardTools.moreInfo(entity)` | 0.1 | Brings up the `more-info` dialog for the specified `entity` id |
-| `window.cardTools.longPress(element)` | 0.1 | Bind `element` to the long-press handler of lovelace. |
+| `window.cardTools.longPress(element)` | 0.1 | Bind `element` to the long-press handler of lovelace |
+| `window.cardTools.parseTemplate(str)` | 0.2 | Parse a simple state template and return results |
 
 > Another way to use the `card-tools` is to just copy the function you want, and paste it into your card. It requires a bit of more work, but may be more user friendly.
 
@@ -178,3 +179,25 @@ firstUpdated() {
   window.cardTools.longpress(this.shadowRoot.querySelector('paper-button'));
 }
 ```
+
+### parseTemplate
+
+This lets you parse a user specified template like `[[ light.bed_light.state ]]` and return the result.
+
+Two things are important:
+
+- The template must start with `[[<space>` and end with `<space>]]`
+- This is not in any way the same kind of template as used in the Home Assistant configuration
+
+The templates are parsed by reading one step at a time from the `hass.states` object.
+Thus, the first part must be an entity with domain and id, e.g. `light.bed_light`, `media_player.bedroom` etc.
+Next is one of:
+
+- `entity_id`
+- `state`
+- `attributes.<attribute>`
+- `last_changed`
+- `last_updated`
+
+If the string does not match the template format, the original string is returned.
+Otherwise the requested value is returned, or an error message on failure.
