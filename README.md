@@ -90,7 +90,7 @@ Currently, the Home Assistant frontend is being converted to LitElement based el
 Instead, a reference to `LitElement` must be extracted from somewhere else:
 
 ```js
-const LitElement = Object.getPrototypeOf(customElements.get('hui-error-entity-row'));
+var LitElement = LitElement || Object.getPrototypeOf(customElements.get('hui-error-entity-row'));
 class LitCard extends LitElement {
   ...
 }
