@@ -57,7 +57,7 @@ if (!window.cardTools){
       };
 
       const _createError = (error, config) => {
-        return _createCard("hui-error-card", {
+        return _createThing("hui-error-card", {
           type: "error",
           error,
           config,
@@ -65,7 +65,7 @@ if (!window.cardTools){
       };
 
       if(!config || typeof config !== "object" || !config.type)
-        return _createErrorCard(`No ${thing} type configured`, config);
+        return _createError(`No ${thing} type configured`, config);
       let tag = config.type;
       if(config.error) {
         const err = config.error;
