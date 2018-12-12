@@ -40,7 +40,7 @@ The following functions and variables are defined:
 | --- | --- | --- |
 | `window.cardTools.v` | 0.1 | Current `card-tools` version |
 | `window.cardTools.checkVersion(v)` | 0.1 | Check that the current `card-tools` version is at least `v` |
-| `window.cardTools.hass` | 0.1 | A reference to the `hass` object. Useful for plugins that are *not* custom cards. If you need it, you'll know it |
+| `window.cardTools.hass()` | 0.1 | Returns A `hass` state object. Useful for plugins that are *not* custom cards. If you need it, you'll know it |
 | `window.cardTool.fireEvent(event, detail)` | 0.1 | Fire lovelace event `event` with options `detail` |
 | `window.cardTools.LitElement` | 0.1 | A reference to the LitElement base class. |
 | `window.cardTools.litHtml` | 0.1 | A reference to the litHtml template function (requires Home Assistant 0.84 or later) |
@@ -50,7 +50,7 @@ The following functions and variables are defined:
 | `window.cardTools.deviceID` | 0.1 | Kind of unique and kind of persistent identifier for the browser viewing the page |
 | `window.cardTools.moreInfo(entity)` | 0.1 | Brings up the `more-info` dialog for the specified `entity` id |
 | `window.cardTools.longPress(element)` | 0.1 | Bind `element` to the long-press handler of lovelace |
-| `window.cardTools.parseTemplate(str)` | 0.2 | Parse a simple state template and return results |
+| `window.cardTools.parseTemplate(text, [error])` | 0.2 | Parse a simple state template and return results |
 
 > Another way to use the `card-tools` is to just copy the function you want, and paste it into your card. It requires a bit of more work, but may be more user friendly.
 
@@ -74,8 +74,8 @@ This is provided for plugins that *aren't* cards, elements or entity rows. For t
 
 ```js
   ...
-  greeting.innerHTML = `Hi there, ${window.cardTools.hass.user.name}`;
-  window.cardTools.hass.connection.subscribeEvents((event) => {console.log("A service was called in Home Assistant")}, 'call-service');
+  greeting.innerHTML = `Hi there, ${window.cardTools.hass().user.name}`;
+  window.cardTools.hass().connection.subscribeEvents((event) => {console.log("A service was called in Home Assistant")}, 'call-service');
 ```
 
 ### fireEvent
@@ -200,3 +200,5 @@ Next is one of:
 - `last_updated`
 
 The function replaces any template found in the supplied string with the requested value, or an error message on failure.
+
+The optional argument `error` is a string that replaces the default error message.

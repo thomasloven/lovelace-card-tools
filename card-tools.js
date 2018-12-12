@@ -22,7 +22,9 @@ if (!window.cardTools){
     cardTools.LitElement.prototype.html;
 
   cardTools.hass =
-    document.querySelector('home-assistant').hass;
+    () => {
+      return document.querySelector('home-assistant').hass;
+    };
 
   cardTools.fireEvent =
     (ev, detail) => {
@@ -177,13 +179,18 @@ if (!window.cardTools){
       return element;
     };
 
+  cardTools.hasTemplate =
+    (text) => {
+      return /\[\[\s+.*\s+\]\]/.test(text);
+    };
+
   cardTools.parseTemplate =
     (text, error) => {
       const _parse = (str) => {
         try {
           str = str.replace(/^\[\[\s+|\s+\]\]$/g, '')
           const parts = str.split(".");
-          let v = cardTools.hass.states[`${parts[0]}.${parts[1]}`];
+          let v = cardTools.hass().states[`${parts[0]}.${parts[1]}`];
           parts.shift();
           parts.shift();
           parts.forEach(item => v = v[item]);
@@ -194,7 +201,7 @@ if (!window.cardTools){
       }
       text = text.replace(/(\[\[\s.*?\s\]\])/g, (str, p1, offset, s) => _parse(str));
       return text;
-    }
+    };
 
   window.cardTools = cardTools;
   cardTools.fireEvent("rebuild-view");
