@@ -38,7 +38,8 @@ if (!window.cardTools){
         .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
         .shadowRoot.querySelector("#panel ha-panel-lovelace")
         .shadowRoot.querySelector("hui-root")
-        .shadowRoot.querySelector("ha-app-layout #view hui-view")
+        .shadowRoot.querySelector("ha-app-layout #view")
+        .firstChild
         .dispatchEvent(ev);
     }
 
