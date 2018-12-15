@@ -3,6 +3,9 @@ card-tools
 
 This is a collection of tools to simplify creating custom cards for [Home Assistant](https://home-assistant.io)
 
+# IMPORTANT
+card-tools and any plugins that require it works only with Home Assistant 0.84 or later.
+
 ## Installation instructions
 
 If you see "Can't find card-tools. [...]" in your Home Assistant UI, follow these instructions.
