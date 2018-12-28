@@ -16,7 +16,7 @@ if (!window.cardTools){
   };
 
   cardTools.LitElement =
-    Object.getPrototypeOf(customElements.get('hui-error-entity-row'));
+    Object.getPrototypeOf(customElements.get('hui-section-row'));
 
   cardTools.litHtml =
     cardTools.LitElement.prototype.html;
@@ -137,7 +137,7 @@ if (!window.cardTools){
       };
 
       if(!config || typeof config !== "object" || (!config.entity && !config.type)) {
-        config = {error: "Invalid config given", ...config};
+        Object.assign(config, {error: "Invalid config given"});
         return cardTools.createThing("", config);
       }
 
@@ -146,7 +146,7 @@ if (!window.cardTools){
         return cardTools.createThing("row", config);
 
       const domain = config.entity.split(".", 1)[0];
-      config = {type: DEFAULT_ROWS[domain] || "text", ...config};
+      Object.assign(config, {type: DEFAULT_ROWS[domain] || "text"});
       return cardTools.createThing("entity-row", config);
     };
 
