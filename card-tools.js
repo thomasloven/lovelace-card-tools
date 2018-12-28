@@ -16,7 +16,7 @@ if (!window.cardTools){
   };
 
   cardTools.LitElement =
-    Object.getPrototypeOf(customElements.get('hui-section-row'));
+    Object.getPrototypeOf(customElements.get('hui-error-entity-row'));
 
   cardTools.litHtml =
     cardTools.LitElement.prototype.html;
