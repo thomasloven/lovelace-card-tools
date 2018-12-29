@@ -195,7 +195,7 @@ if (!window.cardTools){
           parts.shift();
           parts.forEach(item => v = v[item]);
           return v;
-        } catch {
+        } catch (err) {
           return error || `[[ Template matching failed ${str} ]]`;
         }
       }
