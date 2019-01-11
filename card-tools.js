@@ -204,5 +204,7 @@ if (!window.cardTools){
     };
 
   window.cardTools = cardTools;
-  cardTools.fireEvent("rebuild-view");
+  window.setTimeout(() => {
+    cardTools.fireEvent("rebuild-view");
+  }, 200);
 }
