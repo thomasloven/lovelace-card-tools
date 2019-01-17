@@ -1,0 +1,29 @@
+{
+  "name": "com.ha.frk.lovelace.card-tools",
+  "displayName": "Home Assistant Forked Component Lovelace Card Tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "keywords": [
+    "ha",
+    "home_assistant",
+    "lovelace",
+    "darksky"
+  ],
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grittisemper/frk-lovelace-card-tools.git"
+  },
+
+  "engines": {
+    "node": ">=0.10.0"
+  },
+
+  "author": "",
+  "license": "MIT"
+}
