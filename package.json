@@ -1,5 +1,5 @@
 {
-  "name": "com.ha.frk.lovelace.card-tools",
+  "name": "com.ha.frk.lovelace.card.tools",
   "displayName": "Home Assistant Forked Component Lovelace Card Tools",
   "version": "1.0.0",
   "description": "",
