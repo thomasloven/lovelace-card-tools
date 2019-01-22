@@ -203,5 +203,6 @@ if (!window.cardTools){
     };
 
   window.cardTools = cardTools;
-  cardTools.fireEvent("ll-rebuild");
+  // cardTools.fireEvent("ll-rebuild");
+  customElements.define('card-tools', class {});
 }
