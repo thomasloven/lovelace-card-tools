@@ -1,9 +1,8 @@
 customElements.whenDefined('card-tools').then(() => {
-class CardModder extends window.cardTools.LitElement {
+class CardModder extends cardTools.litElement() {
 
   setConfig(config) {
-    if(!window.cardTools) throw new Error(`Can't find card-tools. See https://github.com/thomasloven/lovelace-card-tools`);
-    window.cardTools.checkVersion(0.2);
+    cardTools.checkVersion(0.3);
 
     if(!config || !config.card) {
       throw new Error("Card config incorrect");
@@ -12,13 +11,13 @@ class CardModder extends window.cardTools.LitElement {
       throw new Error("It says 'card', not 'cardS'. Remove the dash.");
     }
     this._config = config;
-    this.card = window.cardTools.createCard(config.card);
+    this.card = cardTools.createCard(config.card);
     this.templated = [];
     this.attempts = 0;
   }
 
   render() {
-    return window.cardTools.litHtml`
+    return cardTools.litHtml()`
     <div id="root">${this.card}</div>
     `;
   }
@@ -40,9 +39,9 @@ class CardModder extends window.cardTools.LitElement {
     target = target || this.card;
 
     for(var k in this._config.style) {
-      if(window.cardTools.hasTemplate(this._config.style[k]))
+      if(cardTools.hasTemplate(this._config.style[k]))
         this.templated.push(k);
-      target.style.setProperty(k, window.cardTools.parseTemplate(this._config.style[k]));
+      target.style.setProperty(k, cardTools.parseTemplate(this._config.style[k]));
     }
     this.target = target;
   }
@@ -51,7 +50,7 @@ class CardModder extends window.cardTools.LitElement {
     if(this.card) this.card.hass = hass;
     if(this.templated)
       this.templated.forEach((k) => {
-        this.target.style.setProperty(k, window.cardTools.parseTemplate(this._config.style[k], ''));
+        this.target.style.setProperty(k, cardTools.parseTemplate(this._config.style[k], ''));
       });
   }
 
@@ -66,7 +65,10 @@ class CardModder extends window.cardTools.LitElement {
 
 customElements.define('card-modder', CardModder);
 });
+
 window.setTimeout(() => {
-  if(!customElements.get('card-tools'))
-    console.info("%cCARD-TOOLS NOT FOUND\nSee https://github.com/thomasloven/lovelace-card-tools", "color: red; font-weight: bold");
+  if(customElements.get('card-tools')) return;
+  customElements.define('card-modder', class extends HTMLElement{
+    setConfig() { throw new Error("Can't find card-tools. See https://github.com/thomasloven/lovelace-card-tools");}
+  });
 }, 2000);
