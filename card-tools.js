@@ -36,6 +36,11 @@ if (!window.cardTools){
       ev.detail = detail || {};
       document
         .querySelector("home-assistant")
+        .shadowRoot.querySelector("home-assistant-main")
+        .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
+        .shadowRoot.querySelector("ha-panel-lovelace")
+        .shadowRoot.querySelector("hui-root")
+        .shadowRoot.querySelector("ha-app-layout #view hui-view")
         .dispatchEvent(ev);
     }
 
@@ -198,5 +203,5 @@ if (!window.cardTools){
     };
 
   window.cardTools = cardTools;
-  cardTools.fireEvent("rebuild-view");
+  cardTools.fireEvent("ll-rebuild");
 }
