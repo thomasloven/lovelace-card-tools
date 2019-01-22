@@ -66,3 +66,7 @@ class CardModder extends window.cardTools.LitElement {
 
 customElements.define('card-modder', CardModder);
 });
+window.setTimeout(() => {
+  if(!customElements.get('card-tools'))
+    console.info("%cCARD-TOOLS NOT FOUND\nSee https://github.com/thomasloven/lovelace-card-tools", "color: red; font-weight: bold");
+}, 2000);

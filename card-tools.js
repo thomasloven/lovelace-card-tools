@@ -203,6 +203,6 @@ if (!window.cardTools){
     };
 
   window.cardTools = cardTools;
-  // cardTools.fireEvent("ll-rebuild");
   customElements.define('card-tools', class {});
+  console.info("%cCARD-TOOLS IS INSTALLED", "color: green; font-weight: bold");
 }
