@@ -181,6 +181,7 @@ class {
   }
 
   static parseTemplate(text, error) {
+    if(typeof(text) !== "string") return text;
     const _parse = (str) => {
       try {
         str = str.replace(/^\[\[\s+|\s+\]\]$/g, '')

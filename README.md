@@ -248,5 +248,6 @@ More can be found by exploring `cardTools.hass().resources`.
 - Updated recommendation for how to check if `card-tools` exists.
 - Added `hasTemplate()` to documentation.
 - Added `args()` function.
+- Added `localize()` function.
 
 ---
