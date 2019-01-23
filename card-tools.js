@@ -116,7 +116,7 @@ class {
     const DEFAULT_ROWS = {
       alert: "toggle",
       automation: "toggle",
-      climate: "toggle",
+      climate: "climate",
       cover: "cover",
       fan: "toggle",
       group: "group",
@@ -133,6 +133,7 @@ class {
       timer: "timer",
       switch: "toggle",
       vacuum: "toggle",
+      water_heater: "climate",
     };
 
     if(!config || typeof config !== "object" || (!config.entity && !config.type)) {
@@ -210,6 +211,13 @@ class {
       }
     });
     return args;
+  }
+
+  static localize(key, def="") {
+    const language = this.hass().language;
+    if(this.hass().resources[language] && this.hass().resources[language][key])
+      return this.hass().resources[language][key];
+    return def;
   }
 
 });

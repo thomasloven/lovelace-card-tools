@@ -87,6 +87,7 @@ The following functions are defined:
 | `cardTools.hasTemplate(text)` | 0.2 | Check if `text` contains a simple state template |
 | `cardTools.parseTemplate(text, [error])` | 0.2 | Parse a simple state template and return results |
 | `cardTools.args()` | 0.3 | Returns URL parameters of the script from `resources:` |
+| `cardTools.localize(key)` | 0.3 | Returns translations of certains strings to the users language |
 
 > Another way to use the `card-tools` is to just copy the function you want, and paste it into your card. It requires a bit of more work, but may be more user friendly.
 
@@ -224,6 +225,17 @@ resources:
 ```
 
 If called from `my-plugin.js` `cardTools.args()` will return the javascript object `{height: 5, flag: undefined, width: 10}`.
+
+### localize
+Returns the translation of certain strings (defined by string keys) to the users language.
+
+Examples of keys:
+- `"state.light.on"`
+- `"state.binary_sensor.garage_door.off"`
+- `"domain.fan"`
+- `"attribute.weather.humidity"`
+
+More can be found by exploring `cardTools.hass().resources`.
 
 ## Changelog
 
