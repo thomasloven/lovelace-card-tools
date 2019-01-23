@@ -4,28 +4,17 @@ card-tools
 This is a collection of tools to simplify creating custom cards for [Home Assistant](https://home-assistant.io)
 
 # IMPORTANT
-card-tools and any plugins that require it works only with Home Assistant 0.84 or later.
+`card-tools` v. 0.3  and any plugins that require it works only with Home Assistant 0.86 or later.
 
 ## Installation instructions
 
 If you see "Can't find card-tools. [...]" in your Home Assistant UI, follow these instructions.
 
-1. Download [card-tools.js](https://github.com/thomasloven/lovelace-card-tools/raw/master/card-tools.js) and place in `<home assistant config root>/www/card-tools.js`.
-
-2. Add the following lines to `<home assistant config root>/ui-lovelace.yaml`
-
-```yaml
-resources:
-  - url: /local/card-tools.js
-    type: js
-```
+To install `card-tools` follow [this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
 ## User instructions
 
 That's all. You don't need to do anything else.
-
-> However, if you wish to update `card-tools` automatically using the [custom updater](https://github.com/custom-components/custom_updater), you should add `?v=0` to the end of the `url:` in your `resources:` section.
-
 
 ## Developer instructions
 
