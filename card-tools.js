@@ -39,7 +39,8 @@ class {
       .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
       .shadowRoot.querySelector("ha-panel-lovelace")
       .shadowRoot.querySelector("hui-root")
-      .shadowRoot.querySelector("ha-app-layout #view hui-view")
+      .shadowRoot.querySelector("ha-app-layout #view")
+      .firstElementChild
       .dispatchEvent(ev);
     }
   }
