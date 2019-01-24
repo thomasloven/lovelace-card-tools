@@ -225,7 +225,7 @@ class {
 });
 
 // Global definition of cardTools
-cardTools = customElements.get('card-tools');
+var cardTools = customElements.get('card-tools');
 
 console.info(`%cCARD-TOOLS IS INSTALLED
 %cDeviceID: ${customElements.get('card-tools').deviceID()}`,
