@@ -222,7 +222,7 @@ class {
     return def;
   }
 
-  static applyThemesOnElement(element, themes, localTheme) {
+  static applyThemesOnElement(element, themes, localTheme, updateMeta = false) {
     if (!element._themes) {
       element._themes = {};
     }
@@ -251,6 +251,8 @@ class {
         styles
       );
     }
+
+    if (!updateMeta) return;
 
     const meta = document.querySelector("meta[name=theme-color]");
     if (meta) {
