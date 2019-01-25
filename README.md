@@ -77,7 +77,7 @@ The following functions are defined:
 | `cardTools.parseTemplate(text, [error])` | 0.2 | Parse a simple state template and return results |
 | `cardTools.args()` | 0.3 | Returns URL parameters of the script from `resources:` |
 | `cardTools.localize(key)` | 0.3 | Returns translations of certains strings to the users language |
-| `applyThemesOnElement(element, themes, theme)` | 0.4 | Applies a theme to the card |
+| `applyThemesOnElement(element, themes, theme, updateMeta)` | 0.4 | Applies a theme to the card |
 
 > Another way to use the `card-tools` is to just copy the function you want, and paste it into your card. It requires a bit of more work, but may be more user friendly.
 
