@@ -240,7 +240,8 @@ class {
 
   static parseTemplate(text, error) {
     if(typeof(text) !== "string") return text;
-    var RE_template = /\[\[\s(.*)\s\]\]/g;
+    // Note: .*? is javascript regex syntax for NON-greedy matching
+    var RE_template = /\[\[\s(.*?)\s\]\]/g;
     text = text.replace(RE_template, (str, p1, offset, s) => this.parseTemplateString(p1));
     return text;
   }
