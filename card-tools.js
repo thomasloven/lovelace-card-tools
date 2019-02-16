@@ -185,7 +185,7 @@ class {
 
   static parseTemplateString(str) {
     if(typeof(str) !== "string") return text;
-    var RE_entity = /^[a-z_.]+$/;
+    var RE_entity = /^[a-z1-9_.]+$/;
     var RE_if = /^if\(([^,]*),([^,]*),(.*)\)$/;
     var RE_expr = /([^=<>!]+)\s*(==|<|>|<=|>=|!=)\s*([^=<>!]+)/
 
