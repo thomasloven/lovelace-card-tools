@@ -1,7 +1,7 @@
 customElements.define('card-tools',
 class {
   static CUSTOM_TYPE_PREFIX() { return "custom:"}
-  static version() { return "0.3"}
+  static version() { return "0.4"}
 
   static v() {return version};
 
