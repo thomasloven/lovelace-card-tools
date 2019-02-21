@@ -19,6 +19,10 @@ class {
     return this.litElement().prototype.html;
   }
 
+  static get litCSS() {
+    return this.litElement().prototype.css;
+  }
+
   static hass() {
     return document.querySelector('home-assistant').hass;
   }
@@ -266,6 +270,48 @@ class {
     if(this.hass().resources[language] && this.hass().resources[language][key])
       return this.hass().resources[language][key];
     return def;
+  }
+
+  static popUp(title, message, large=false) {
+    let popup = document.createElement('div');
+    popup.innerHTML = `
+    <style>
+      app-toolbar {
+        color: var(--more-info-header-color);
+        background-color: var(--more-info-header-background);
+      }
+    </style>
+    <app-toolbar>
+      <paper-icon-button
+        icon="hass:close"
+        dialog-dismiss=""
+      ></paper-icon-button>
+      <div class="main-title" main-title="">
+        ${title}
+      </div>
+    </app-toolbar>
+  `;
+    popup.appendChild(message);
+    cardTools.moreInfo(Object.keys(cardTools.hass().states)[0]);
+    let moreInfo = document.querySelector("home-assistant")._moreInfoEl;
+    moreInfo._page = "none";
+    moreInfo.shadowRoot.appendChild(popup);
+    moreInfo.large = large;
+
+    setTimeout(() => {
+      let interval = setInterval(() => {
+        if (moreInfo.getAttribute('aria-hidden')) {
+          popup.parentNode.removeChild(popup);
+          clearInterval(interval);
+        } else {
+          message.hass = cardTools.hass();
+        }
+      }, 100)
+    }, 1000);
+  }
+  static closePopUp() {
+    let moreInfo = document.querySelector("home-assistant")._moreInfoEl;
+    if (moreInfo) moreInfo.close()
   }
 
 });
