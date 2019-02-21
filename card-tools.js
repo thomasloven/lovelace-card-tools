@@ -51,6 +51,27 @@ class {
     }
   }
 
+  static get lovelace() {
+    var root = document
+      .querySelector("home-assistant")
+      .shadowRoot.querySelector("home-assistant-main")
+      .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
+      .shadowRoot.querySelector("ha-panel-lovelace")
+      .shadowRoot.querySelector("hui-root")
+    if (root) {
+      var ll =  root
+        .shadowRoot.querySelector("ha-app-layout #view")
+        .firstElementChild
+        .lovelace;
+      ll.current_view = root
+        .shadowRoot.querySelector("ha-app-layout #view")
+        .firstElementChild
+        . index;
+      return ll;
+    }
+    return null;
+  }
+
   static createThing(thing, config) {
     const _createThing = (tag, config) => {
       const element = document.createElement(tag);
