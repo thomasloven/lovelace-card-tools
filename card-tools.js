@@ -267,9 +267,9 @@ class {
       let v;
       if(str[0].match(SPECIAL)) {
         v = _parse_special(str.shift());
-        v = this.hass().states[v] || v;
+        v = this.hass.states[v] || v;
       } else {
-        v = this.hass().states[`${str.shift()}.${str.shift()}`];
+        v = this.hass.states[`${str.shift()}.${str.shift()}`];
         if(!str.length) return v['state'];
       }
       str.forEach(item => v=v[item]);
@@ -338,9 +338,9 @@ class {
   }
 
   static localize(key, def="") {
-    const language = this.hass().language;
-    if(this.hass().resources[language] && this.hass().resources[language][key])
-      return this.hass().resources[language][key];
+    const language = this.hass.language;
+    if(this.hass.resources[language] && this.hass.resources[language][key])
+      return this.hass.resources[language][key];
     return def;
   }
 
@@ -364,7 +364,7 @@ class {
     </app-toolbar>
   `;
     popup.appendChild(message);
-    cardTools.moreInfo(Object.keys(cardTools.hass().states)[0]);
+    this.moreInfo(Object.keys(this.hass.states)[0]);
     let moreInfo = document.querySelector("home-assistant")._moreInfoEl;
     moreInfo._page = "none";
     moreInfo.shadowRoot.appendChild(popup);
@@ -376,7 +376,7 @@ class {
           popup.parentNode.removeChild(popup);
           clearInterval(interval);
         } else {
-          message.hass = cardTools.hass();
+          message.hass = this.hass;
         }
       }, 100)
     }, 1000);
