@@ -85,7 +85,7 @@ The following functions are defined:
 | `cardTools.moreInfo(entity)` | 0.1 | Brings up the `more-info` dialog for the specified `entity` id |
 | `cardTools.longPress(element)` | 0.1 | Bind `element` to the long-press handler of lovelace |
 | `cardTools.hasTemplate(text)` | 0.2 | Check if `text` contains a simple state template |
-| `cardTools.parseTemplate(text, [error])` | 0.2 | Parse a simple state template and return results |
+| `cardTools.parseTemplate(text, [data])` | 0.2 | Parse a simple state template and return results |
 | `cardTools.args(script)` | 0.3 | Returns URL parameters of the script from `resources:` |
 | `cardTools.localize(key)` | 0.3 | Returns translations of certains strings to the users language |
 | `cardTools.lovelace`| 0.4 | A reference to a structure containing some information about the users lovelace configuration |
@@ -220,7 +220,7 @@ Next is one of:
 
 The function replaces any template found in the supplied string with the requested value, or an error message on failure.
 
-The optional argument `error` is a string that replaces the default error message.
+The optional argument `data` can be an object containing extra data for templates. In a template `{key}` will be evaluated to `data[key]`.
 
 `cardTools.hasTemplate` just checks if a string contains a simple state template.
 
@@ -286,3 +286,4 @@ The `script` parameter is required if `cardTools.logger` is called from within a
 - Added `script` parameter to `cardTools.args`
 
 ---
+<a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
