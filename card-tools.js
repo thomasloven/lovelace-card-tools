@@ -68,14 +68,8 @@ class {
       .shadowRoot.querySelector("ha-panel-lovelace")
       .shadowRoot.querySelector("hui-root")
     if (root) {
-      var ll =  root
-        .shadowRoot.querySelector("ha-app-layout #view")
-        .firstElementChild
-        .lovelace;
-      ll.current_view = root
-        .shadowRoot.querySelector("ha-app-layout #view")
-        .firstElementChild
-        .index;
+      var ll =  root.lovelace
+      ll.current_view = root.___curView;
       return ll;
     }
     return null;
