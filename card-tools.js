@@ -230,16 +230,29 @@ class {
       str = str.substr(str.indexOf('(')+1);
       while(str) {
         let index = 0;
-        let stack = [];
+        let parens = 0;
+        let quote = false;
         while(str[index]) {
-          if(",)".includes(str[index]) && !stack.length) break;
-          if(str[index] == '(') stack.push(')');
-          if(stack[stack.length - 1] === str[index]) stack.pop();
-          else if(`"'`.includes(str[index])) stack.push(str[index]);
-          index = index + 1;
+          let c = str[index++];
+
+          if(c === quote && index > 1 && str[index-2] !== "\\")
+              quote = false;
+          else if(`"'`.includes(c))
+            quote = c;
+          if(quote) continue;
+
+          if(c === '(')
+            parens = parens + 1;
+          else if(c === ')') {
+            parens = parens - 1;
+            continue
+          }
+          if(parens > 0) continue;
+
+          if(",)".includes(c)) break;
         }
-        args.push(str.substr(0, index).trim());
-        str = str.substr(index+1);
+        args.push(str.substr(0, index-1).trim());
+        str = str.substr(index);
       }
       return args;
     };
