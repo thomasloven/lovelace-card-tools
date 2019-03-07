@@ -379,6 +379,7 @@ class {
         }
       }, 100)
     }, 1000);
+  return moreInfo;
   }
   static closePopUp() {
     let moreInfo = document.querySelector("home-assistant")._moreInfoEl;
