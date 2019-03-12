@@ -122,7 +122,7 @@ class {
       config
     );
     element.style.display = "None";
-    const time = setTimeout(() => {
+    const timer = setTimeout(() => {
       element.style.display = "";
     }, 2000);
     // Remove error if element is defined later
