@@ -176,6 +176,7 @@ class {
       light: "toggle",
       media_player: "media-player",
       lock: "lock",
+      remote: "toggle",
       scene: "scene",
       script: "script",
       sensor: "sensor",
