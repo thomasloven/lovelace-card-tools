@@ -19,7 +19,9 @@ class {
   }
 
   static get LitElement() {
-    return Object.getPrototypeOf(customElements.get('home-assistant-main'));
+    if(customElements.get('home-assistant-main'))
+      return Object.getPrototypeOf(customElements.get('home-assistant-main'));
+    return Object.getPrototypeOf(customElements.get('hui-view'));
   }
   static litElement() { // Backwards compatibility - deprecated
     this.deprecationWarning();
