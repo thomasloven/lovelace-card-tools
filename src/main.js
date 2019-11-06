@@ -10,11 +10,13 @@ import { popUp, closePopUp } from "./popup.js";
 import { parseTemplate, subscribeRenderTemplate } from "./templates.js";
 import { hasOldTemplate, parseOldTemplate } from "./old-templates.js";
 
-
 class CardTools {
 
-  static checkVersion(v) {
-  }
+  static checkVersion(v) { }
+
+  static args() {}
+  static logger() { }
+  static get localize() { return hass().localize; }
 
   static get deviceID() { return deviceID; }
 
