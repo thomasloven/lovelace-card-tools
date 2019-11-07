@@ -9,6 +9,7 @@ import { moreInfo } from "./more-info.js";
 import { popUp, closePopUp } from "./popup.js";
 import { parseTemplate, subscribeRenderTemplate } from "./templates.js";
 import { hasOldTemplate, parseOldTemplate } from "./old-templates.js";
+import { getData, areaByName, areaDevices, deviceByName, deviceEntities }  from "./devices";
 
 class CardTools {
 
@@ -50,6 +51,11 @@ class CardTools {
   }
   static get subscribeRenderTemplate() { return subscribeRenderTemplate; }
 
+  static get getData() { return getData; }
+  static get areaByName() { return areaByName; }
+  static get areaDevices() { return areaDevices; }
+  static get deviceByName() { return deviceByName; }
+  static get deviceEntities() { return deviceEntities; }
 }
 
 if(!customElements.get("card-tools")) {
