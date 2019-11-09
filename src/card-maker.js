@@ -40,6 +40,11 @@ if(!customElements.get("card-maker")) {
     create(config) {
       return createCard(config);
     }
+    getCardSize() {
+      if(this.firstElementChild && this.firstElementChild.getCardSize)
+        return this.firstElementChild.getCardSize();
+      return 1;
+    }
   }
   customElements.define("card-maker", CardMaker);
 }
