@@ -10,12 +10,12 @@ export const DOMAINS_HIDE_MORE_INFO = [
   "weblink",
 ];
 
-function errorElement(error, config) {
+function errorElement(error, origConfig) {
   const el = document.createElement("hui-error-card");
   el.setConfig({
     type: "error",
     error,
-    config,
+    origConfig,
   });
   return el;
 }
