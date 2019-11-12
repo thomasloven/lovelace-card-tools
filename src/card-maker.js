@@ -45,7 +45,8 @@ const redefineElement = function(element, newClass) {
   // Non-static properties of class
   const properties = Object.getOwnPropertyDescriptors(newClass.prototype);
   for(const [k,v] of Object.entries(properties)) {
-    Object.defineProperty(element, k, v);
+    if(k === "constructor") continue;
+    Object.defineProperty(element.prototype, k, v);
   }
   // Static properties of class
   const staticProperties = Object.getOwnPropertyDescriptors(newClass);
@@ -57,6 +58,7 @@ const redefineElement = function(element, newClass) {
   // Non-static properties of superclass
   const baseProperties = Object.getOwnPropertyDescriptors(superclass.prototype);
   for(const [k,v] of Object.entries(baseProperties)) {
+    if(k === "constructor") continue;
     Object.defineProperty(Object.getPrototypeOf(element).prototype, k, v);
   }
   // Static properties of superclassk
