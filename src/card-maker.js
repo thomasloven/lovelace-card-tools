@@ -2,22 +2,27 @@ import { LitElement, html } from "./lit-element.js";
 import { createCard, createEntityRow, createElement } from "./lovelace-element.js";
 import { provideHass } from "./hass.js";
 
+const VERSION = 2;
+
 class ThingMaker extends LitElement {
+  static get version() {
+    return VERSION;
+  }
+
   static get properties() {
     return {
-      'hass': {},
-      'config': {},
       'noHass': {type: Boolean },
     };
   }
   setConfig(config) {
     this._config = config;
-    if(!this.el)
+    if(!this.el) {
       this.el = this.create(config);
-    else
+      if(this._hass) this.el.hass = this._hass;
+      if(this.noHass) provideHass(this);
+    } else {
       this.el.setConfig(config);
-    if(this._hass) this.el.hass = this._hass;
-    if(this.noHass) provideHass(this);
+    }
   }
   set config(config) {
     this.setConfig(config);
@@ -35,7 +40,35 @@ class ThingMaker extends LitElement {
   }
 }
 
-if(!customElements.get("card-maker")) {
+
+const redefineElement = function(element, newClass) {
+  // Non-static properties of class
+  const properties = Object.getOwnPropertyDescriptors(newClass.prototype);
+  for(const [k,v] of Object.entries(properties)) {
+    Object.defineProperty(element, k, v);
+  }
+  // Static properties of class
+  const staticProperties = Object.getOwnPropertyDescriptors(newClass);
+  for(const [k,v] of Object.entries(staticProperties)) {
+    if(k === "prototype") continue;
+    Object.defineProperty(element, k, v);
+  }
+  const superclass = Object.getPrototypeOf(newClass);
+  // Non-static properties of superclass
+  const baseProperties = Object.getOwnPropertyDescriptors(superclass.prototype);
+  for(const [k,v] of Object.entries(baseProperties)) {
+    Object.defineProperty(Object.getPrototypeOf(element).prototype, k, v);
+  }
+  // Static properties of superclassk
+  const staticBaseProperties = Object.getOwnPropertyDescriptors(superclass);
+  for(const [k,v] of Object.entries(staticBaseProperties)) {
+    if(k === "prototype") continue;
+    Object.defineProperty(Object.getPrototypeOf(element), k, v);
+  }
+}
+
+const cardMaker = customElements.get("card-maker");
+if(!cardMaker || !cardMaker.version || cardMaker.version < VERSION) {
   class CardMaker extends ThingMaker {
     create(config) {
       return createCard(config);
@@ -46,23 +79,39 @@ if(!customElements.get("card-maker")) {
       return 1;
     }
   }
-  customElements.define("card-maker", CardMaker);
+
+  if(cardMaker) {
+    redefineElement(cardMaker, CardMaker);
+  } else {
+    customElements.define("card-maker", CardMaker);
+  }
 }
 
-if(!customElements.get("element-maker")) {
+const elementMaker = customElements.get("element-maker");
+if(!elementMaker || !elementMaker.version || elementMaker.version < VERSION) {
   class ElementMaker extends ThingMaker {
     create(config) {
       return createElement(config);
     }
   }
-  customElements.define("element-maker", ElementMaker);
+
+  if(elementMaker) {
+    redefineElement(elementMaker, ElementMaker);
+  } else {
+    customElements.define("element-maker", ElementMaker);
+  }
 }
 
-if(!customElements.get("entity-row-maker")) {
+const entityRowMaker = customElements.get("entity-row-maker");
+if(!entityRowMaker || !entityRowMaker.version || entityRowMaker.version < VERSION) {
   class EntityRowMaker extends ThingMaker {
     create(config) {
       return createEntityRow(config);
     }
   }
-  customElements.define("entity-row-maker", EntityRowMaker);
+  if(entityRowMaker) {
+    redefineElement(entityRowMaker, EntityRowMaker);
+  } else {
+    customElements.define("entity-row-maker", EntityRowMaker);
+  }
 }
