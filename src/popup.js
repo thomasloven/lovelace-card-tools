@@ -13,7 +13,7 @@ export function closePopUp() {
 export function popUp(title, card, large=false, style=null, fullscreen=false) {
 
   // Force _moreInfoEl to be loaded
-  fireEvent("hass-more-info", {entityId: null});
+  fireEvent("hass-more-info", {entityId: null}, document.querySelector("home-assistant"));
   const moreInfoEl = document.querySelector("home-assistant")._moreInfoEl;
   // Close and reopen to clear any previous styling
   // Necessary for popups from popups

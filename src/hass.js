@@ -46,10 +46,11 @@ export function load_lovelace() {
   const res = document.createElement("partial-panel-resolver");
   res.hass = hass();
   res.route = {path: "/lovelace/"};
-  // res._updateRoutes();
+  res._updateRoutes();
   try {
-    document.querySelector("home-assistant").appendChild(res).catch((error) => {});
+    document.querySelector("home-assistant").appendChild(res);
   } catch (error) {
+  } finally {
     document.querySelector("home-assistant").removeChild(res);
   }
   if(customElements.get("hui-view")) return true;
