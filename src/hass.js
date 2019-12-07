@@ -44,7 +44,10 @@ export function load_lovelace() {
   if(customElements.get("hui-view")) return true;
 
   const res = document.createElement("partial-panel-resolver");
-  res.hass = hass();
+  res.hass = undefined;
+  while(!res.hass || !res.hass.panels) {
+    res.hass = hass();
+  }
   res.route = {path: "/lovelace/"};
   res._updateRoutes();
   try {
@@ -55,5 +58,4 @@ export function load_lovelace() {
   }
   if(customElements.get("hui-view")) return true;
   return false;
-
 }
