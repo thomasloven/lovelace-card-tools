@@ -7,7 +7,7 @@ import { bindActionHandler } from "./action.js";
 import { createCard, createElement, createEntityRow } from "./lovelace-element.js";
 import { moreInfo } from "./more-info.js";
 import { popUp, closePopUp } from "./popup.js";
-import { parseTemplate, subscribeRenderTemplate } from "./templates.js";
+import { parseTemplate, subscribeRenderTemplate, hasTemplate } from "./templates.js";
 import { hasOldTemplate, parseOldTemplate } from "./old-templates.js";
 import { getData, areaByName, areaDevices, deviceByName, deviceEntities }  from "./devices";
 
@@ -43,7 +43,7 @@ class CardTools {
   static get popUp() { return popUp; }
   static get closePopUp() { return closePopUp; }
 
-  static get hasTemplate() { return hasOldTemplate; }
+  static get hasTemplate() { return (tpl) => hasTemplate(tpl) || hasOldTemplate(tpl); }
   static parseTemplate(hass, str, specialData = {}) {
     if (typeof(hass) === "string")
       return parseOldTemplate(hass, str);

@@ -19,6 +19,13 @@ export async function parseTemplate(hass, str, specialData = {}) {
     return hass.callApi("POST", "template", {template: str});
 };
 
+export function hasTemplate(str) {
+  if(String(str).includes("{%"))
+    return true;
+  if(String(str).includes("{{"))
+    return true;
+}
+
 export function subscribeRenderTemplate(conn, onChange, params) {
   // params = {template, entity_ids, variables}
   if(!conn)
@@ -33,7 +40,13 @@ export function subscribeRenderTemplate(conn, onChange, params) {
   let entity_ids = params.entity_ids;
 
   return conn.subscribeMessage(
-    (msg) => onChange(msg.result),
+    (msg) => {
+      let res = msg.result;
+      // Localize "_(key)" if found in template results
+      const localize_function = /_\([^)]*\)/g;
+      res = res.replace(localize_function, (key) => hass().localize(key.substring(2, key.length-1)) || key);
+      onChange(res)
+    },
     { type: "render_template",
       template,
       variables,
