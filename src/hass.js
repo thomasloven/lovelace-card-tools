@@ -1,9 +1,17 @@
 export function hass() {
-  return document.querySelector('home-assistant').hass
+  if(document.querySelector('home-assistant'))
+    return document.querySelector('home-assistant').hass;
+  if(document.querySelector('hc-main'))
+    return document.querySelector('hc-main').hass;
+  return undefined;
 };
 
 export function provideHass(element) {
-  return document.querySelector("home-assistant").provideHass(element);
+  if(document.querySelector('home-assistant'))
+    return document.querySelector("home-assistant").provideHass(element);
+  if(document.querySelector('hc-main'))
+    return document.querySelector('hc-main').provideHass(element);
+  return undefined;
 }
 
 export function lovelace() {
