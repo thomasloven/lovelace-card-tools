@@ -1,21 +1,32 @@
 export function hass() {
-  if(document.querySelector('home-assistant'))
-    return document.querySelector('home-assistant').hass;
   if(document.querySelector('hc-main'))
     return document.querySelector('hc-main').hass;
+
+  if(document.querySelector('home-assistant'))
+    return document.querySelector('home-assistant').hass;
+
   return undefined;
 };
 
 export function provideHass(element) {
-  if(document.querySelector('home-assistant'))
-    return document.querySelector("home-assistant").provideHass(element);
   if(document.querySelector('hc-main'))
     return document.querySelector('hc-main').provideHass(element);
+
+  if(document.querySelector('home-assistant'))
+    return document.querySelector("home-assistant").provideHass(element);
+
   return undefined;
 }
 
 export function lovelace() {
-  var root = document.querySelector("home-assistant");
+  var root = document.querySelector("hc-main");
+  if(root) {
+    var ll = root._lovelaceConfig;
+    ll.current_view = root._lovelacePath;
+    return ll;
+  }
+
+  root = document.querySelector("home-assistant");
   root = root && root.shadowRoot;
   root = root && root.querySelector("home-assistant-main");
   root = root && root.shadowRoot;
@@ -29,11 +40,21 @@ export function lovelace() {
     ll.current_view = root.___curView;
     return ll;
   }
+
   return null;
 }
 
 export function lovelace_view() {
-  var root = document.querySelector("home-assistant");
+  var root = document.querySelector("hc-main");
+  if(root) {
+    root = root && root.shadowRoot;
+    root = root && root.querySelector("hc-lovelace");
+    root = root && root.shadowRoot;
+    root = root && root.querySelector("hui-view");
+    return root;
+  }
+
+  root = document.querySelector("home-assistant");
   root = root && root.shadowRoot;
   root = root && root.querySelector("home-assistant-main");
   root = root && root.shadowRoot;

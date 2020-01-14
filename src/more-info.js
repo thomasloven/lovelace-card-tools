@@ -1,8 +1,9 @@
-import { fireEvent } from "./event.js";
+import { fireEvent } from "./event";
 
 export function moreInfo(entity, large=false) {
-  fireEvent("hass-more-info", {entityId: entity}, document.querySelector("home-assistant"));
-  const el = document.querySelector("home-assistant")._moreInfoEl;
+  const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
+  fireEvent("hass-more-info", {entityId: entity}, root);
+  const el = root._moreInfoEl;
   el.large = large;
   return el;
 }

@@ -1,20 +1,18 @@
-import { hass, provideHass } from "./hass.js";
-import { fireEvent } from "./event.js";
-import { createCard } from "./lovelace-element.js";
-import { moreInfo } from "./more-info.js";
-import "./card-maker.js"
+import { fireEvent } from "./event";
+import "./card-maker"
 
 export function closePopUp() {
-  const moreInfoEl = document.querySelector("home-assistant") && document.querySelector("home-assistant")._moreInfoEl;
+  const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
+  const moreInfoEl = root && root._moreInfoEl;
   if(moreInfoEl)
     moreInfoEl.close();
 }
 
 export function popUp(title, card, large=false, style=null, fullscreen=false) {
-
+  const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
   // Force _moreInfoEl to be loaded
-  fireEvent("hass-more-info", {entityId: null}, document.querySelector("home-assistant"));
-  const moreInfoEl = document.querySelector("home-assistant")._moreInfoEl;
+  fireEvent("hass-more-info", {entityId: null}, root);
+  const moreInfoEl = root._moreInfoEl;
   // Close and reopen to clear any previous styling
   // Necessary for popups from popups
   moreInfoEl.close();
