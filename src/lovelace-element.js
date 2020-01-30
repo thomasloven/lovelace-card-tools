@@ -108,7 +108,8 @@ export function createEntityRow(config) {
     return createLovelaceElement('row', config);
 
   const domain = config.entity.split(".", 1)[0];
-  Object.assign(config, {type: DEFAULT_ROWS[domain] || "text"});
-
-  return createLovelaceElement('entity-row', config);
+  return createLovelaceElement('entity-row', {
+    type: DEFAULT_ROWS[domain] || "text",
+    ...config,
+    });
 }
