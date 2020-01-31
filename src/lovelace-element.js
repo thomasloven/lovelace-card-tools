@@ -23,7 +23,7 @@ function errorElement(error, origConfig) {
 function _createElement(tag, config) {
   const el = document.createElement(tag);
   try {
-    el.setConfig(config);
+    el.setConfig({...config});
   } catch (err) {
     return errorElement(err, config);
   }
