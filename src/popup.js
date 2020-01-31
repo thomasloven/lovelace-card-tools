@@ -18,6 +18,9 @@ export function popUp(title, card, large=false, style=null, fullscreen=false) {
   moreInfoEl.close();
   moreInfoEl.open();
 
+  const oldContent = moreInfoEl.shadowRoot.querySelector("more-info-controls");
+  if(oldContent) oldContent.style['display'] = 'none';
+
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
   <style>
@@ -76,6 +79,10 @@ export function popUp(title, card, large=false, style=null, fullscreen=false) {
       if (this.shadowRoot == wrapper.parentNode) {
         this._page = null;
         this.shadowRoot.removeChild(wrapper);
+
+        const oldContent = this.shadowRoot.querySelector("more-info-controls");
+        if(oldContent) oldContent.style['display'] = "";
+
         if(style) {
           moreInfoEl.resetFit();
           for (var k in oldStyle)
