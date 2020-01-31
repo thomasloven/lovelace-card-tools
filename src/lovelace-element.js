@@ -67,8 +67,11 @@ export function createElement(config) {
 export function createEntityRow(config) {
   const SPECIAL_TYPES = new Set([
     "call-service",
+    "cast",
+    "conditional",
     "divider",
     "section",
+    "select",
     "weblink",
   ]);
   const DEFAULT_ROWS = {
