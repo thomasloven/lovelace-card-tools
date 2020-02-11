@@ -81,7 +81,7 @@ export function popUp(title, card, large=false, style=null, fullscreen=false) {
         this.shadowRoot.removeChild(wrapper);
 
         const oldContent = this.shadowRoot.querySelector("more-info-controls");
-        if(oldContent) oldContent.style['display'] = "";
+        if(oldContent) oldContent.style['display'] = "inline";
 
         if(style) {
           moreInfoEl.resetFit();
