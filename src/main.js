@@ -10,6 +10,7 @@ import { popUp, closePopUp } from "./popup.js";
 import { parseTemplate, subscribeRenderTemplate, hasTemplate } from "./templates.js";
 import { hasOldTemplate, parseOldTemplate } from "./old-templates.js";
 import { getData, areaByName, areaDevices, deviceByName, deviceEntities }  from "./devices";
+import { registerCard } from "./editor";
 
 class CardTools {
 
@@ -56,12 +57,16 @@ class CardTools {
   static get areaDevices() { return areaDevices; }
   static get deviceByName() { return deviceByName; }
   static get deviceEntities() { return deviceEntities; }
+
+  static get registerCard() { return registerCard; }
 }
+
+const pjson = require('../package.json');
 
 if(!customElements.get("card-tools")) {
   customElements.define("card-tools", CardTools);
   window.cardTools = customElements.get('card-tools');
-  console.info(`%cCARD-TOOLS 2 IS INSTALLED
+  console.info(`%cCARD-TOOLS ${pjson.version} IS INSTALLED
   %cDeviceID: ${customElements.get('card-tools').deviceID}`,
   "color: green; font-weight: bold",
   "");
