@@ -10,6 +10,16 @@ export const DOMAINS_HIDE_MORE_INFO = [
   "weblink",
 ];
 
+let helpers = window.cardHelpers;
+const helperPromise = new Promise(async (resolve, reject) => {
+  if(helpers) resolve();
+  if(window.loadCardHelpers) {
+    helpers = await window.loadCardHelpers();
+    window.cardHelpers = helpers;
+    resolve();
+  }
+})
+
 function errorElement(error, origConfig) {
   const el = document.createElement("hui-error-card");
   el.setConfig({
@@ -21,12 +31,15 @@ function errorElement(error, origConfig) {
 }
 
 function _createElement(tag, config) {
-  const el = document.createElement(tag);
+  let el = document.createElement(tag);
   try {
-    el.setConfig({...config});
+    el.setConfig(JSON.parse(JSON.stringify(config)));
   } catch (err) {
-    return errorElement(err, config);
+    el = errorElement(err, config);
   }
+  helperPromise.then(() => {
+    fireEvent("ll-rebuild", {}, el);
+  });
   return el;
 }
 
@@ -59,12 +72,15 @@ function createLovelaceElement(thing, config) {
 }
 
 export function createCard(config) {
+  if(helpers) return helpers.createCardElement(config);
   return createLovelaceElement('card', config);
 }
 export function createElement(config) {
+  if(helpers) return helpers.createHuiElement(config);
   return createLovelaceElement('element', config);
 }
 export function createEntityRow(config) {
+  if(helpers) return helpers.createRowElement(config);
   const SPECIAL_TYPES = new Set([
     "call-service",
     "cast",
