@@ -11,6 +11,7 @@ import { parseTemplate, subscribeRenderTemplate, hasTemplate } from "./templates
 import { hasOldTemplate, parseOldTemplate } from "./old-templates.js";
 import { getData, areaByName, areaDevices, deviceByName, deviceEntities }  from "./devices";
 import { registerCard } from "./editor";
+import { yaml2json } from "./yaml";
 
 class CardTools {
 
@@ -59,6 +60,8 @@ class CardTools {
   static get deviceEntities() { return deviceEntities; }
 
   static get registerCard() { return registerCard; }
+
+  static get yaml2json() { return yaml2json; }
 }
 
 const pjson = require('../package.json');
