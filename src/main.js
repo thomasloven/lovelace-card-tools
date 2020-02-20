@@ -74,5 +74,3 @@ if(!customElements.get("card-tools")) {
   "color: green; font-weight: bold",
   "");
 }
-
-
