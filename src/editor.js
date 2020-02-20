@@ -19,7 +19,6 @@ export function registerCard(type, label) {
             window._customCardButtons.forEach
             this.shadowRoot.appendChild(this._customCardButtons);
             window._customCardButtons.forEach(b => {
-                console.log(b);
                 const button = document.createElement("mwc-button");
                 button.type = "custom:"+b.el;
                 button.innerHTML = b.name;
