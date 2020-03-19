@@ -27,6 +27,9 @@ function errorElement(error, origConfig) {
     error,
     origConfig,
   });
+  helperPromise.then(() => {
+    fireEvent("ll-rebuild", {}, el);
+  });
   return el;
 }
 

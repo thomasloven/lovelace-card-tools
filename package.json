@@ -1,7 +1,7 @@
 {
   "name": "card-tools",
   "private": true,
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Lovelace Card Tools",
   "scripts": {
     "build": "webpack",
