@@ -1,4 +1,5 @@
-import { fireEvent } from "./event.js";
+import { fireEvent } from "./event";
+import { load_lovelace } from "./hass";
 
 export const CUSTOM_TYPE_PREFIX = "custom:";
 
@@ -13,12 +14,25 @@ export const DOMAINS_HIDE_MORE_INFO = [
 let helpers = window.cardHelpers;
 const helperPromise = new Promise(async (resolve, reject) => {
   if(helpers) resolve();
-  if(window.loadCardHelpers) {
+
+  const updateHelpers = async () => {
     helpers = await window.loadCardHelpers();
     window.cardHelpers = helpers;
     resolve();
   }
-})
+
+  if(window.loadCardHelpers) {
+    updateHelpers();
+  } else {
+    // If loadCardHelpers didn't exist, force load lovelace and try once more.
+    window.addEventListener("load", async () => {
+      load_lovelace();
+      if(window.loadCardHelpers) {
+        updateHelpers();
+      }
+    });
+  }
+});
 
 function errorElement(error, origConfig) {
   const el = document.createElement("hui-error-card");

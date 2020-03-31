@@ -1,5 +1,7 @@
 import { fireEvent } from "./event";
-import "./card-maker"
+import { provideHass } from "./hass";
+import { createCard } from "./lovelace-element";
+import "./lovelace-element";
 
 export function closePopUp() {
   const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
@@ -48,14 +50,24 @@ export function popUp(title, card, large=false, style=null, fullscreen=false) {
       `
     }
     <div class="scrollable">
-      <card-maker nohass>
-      </card-maker>
     </div>
   `;
 
   const scroll = wrapper.querySelector(".scrollable");
-  const content = scroll.querySelector("card-maker");
-  content.config = card;
+  const content = createCard(card);
+  provideHass(content);
+  scroll.appendChild(content);
+
+  content.addEventListener(
+    "ll-rebuild",
+    (ev) => {
+      ev.stopPropagation();
+      const newContent = createCard(card);
+      provideHass(newContent);
+      scroll.replaceChild(newContent, content);
+    },
+    { once: true}
+  );
 
   moreInfoEl.sizingTarget = scroll;
   moreInfoEl.large = large;
