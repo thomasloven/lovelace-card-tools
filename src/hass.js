@@ -50,7 +50,7 @@ export function lovelace_view() {
     root = root && root.shadowRoot;
     root = root && root.querySelector("hc-lovelace");
     root = root && root.shadowRoot;
-    root = root && root.querySelector("hui-view");
+    root = root && root.querySelector("hui-view") || root.querySelector("hui-panel-view");
     return root;
   }
 
