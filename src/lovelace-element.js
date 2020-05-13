@@ -36,10 +36,12 @@ const helperPromise = new Promise(async (resolve, reject) => {
 
 function errorElement(error, origConfig) {
   const el = document.createElement("hui-error-card");
-  el.setConfig({
-    type: "error",
-    error,
-    origConfig,
+  customElements.whenDefined("hui-error-card").then(() => {
+    el.setConfig({
+      type: "error",
+      error,
+      origConfig,
+    });
   });
   helperPromise.then(() => {
     fireEvent("ll-rebuild", {}, el);
