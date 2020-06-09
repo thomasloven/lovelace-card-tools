@@ -35,13 +35,17 @@ const helperPromise = new Promise(async (resolve, reject) => {
 });
 
 function errorElement(error, origConfig) {
+  const cfg = {
+    type: "error",
+    error,
+    origConfig,
+  };
   const el = document.createElement("hui-error-card");
   customElements.whenDefined("hui-error-card").then(() => {
-    el.setConfig({
-      type: "error",
-      error,
-      origConfig,
-    });
+    const newel = document.createElement("hui-error-card");
+    newel.setConfig(cfg);
+    if(el.parentElement)
+      el.parentElement.replaceChild(newel, el);
   });
   helperPromise.then(() => {
     fireEvent("ll-rebuild", {}, el);
