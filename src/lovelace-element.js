@@ -136,6 +136,7 @@ export function createEntityRow(config) {
     vacuum: "toggle",
     water_heater: "climate",
     input_datetime: "input-datetime",
+    none: undefined,
   };
 
   if(!config)
@@ -149,7 +150,7 @@ export function createEntityRow(config) {
   if(SPECIAL_TYPES.has(type) || type.startsWith(CUSTOM_TYPE_PREFIX))
     return createLovelaceElement('row', config);
 
-  const domain = config.entity.split(".", 1)[0];
+  const domain = config.entity ? config.entity.split(".", 1)[0]: "none";
   return createLovelaceElement('entity-row', {
     type: DEFAULT_ROWS[domain] || "text",
     ...config,
