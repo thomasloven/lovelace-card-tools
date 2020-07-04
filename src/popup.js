@@ -10,7 +10,7 @@ export function closePopUp() {
     moreInfoEl.close();
 }
 
-export function popUp(title, card, large=false, style=null, fullscreen=false) {
+export function popUp(title, card, large=false, style=null, fullscreen=false, autoclose_popup_time=0) {
   const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
   // Force _moreInfoEl to be loaded
   fireEvent("hass-more-info", {entityId: null}, root);
@@ -70,6 +70,16 @@ export function popUp(title, card, large=false, style=null, fullscreen=false) {
     { once: true}
   );
 
+  if (autoclose_popup_time > 0) {
+    content.timerID = setTimeout(closePopUp, autoclose_popup_time);
+    content.addEventListener("mousemove", e => {
+      if (content.timerID) {
+        clearTimeout(content.timerID);
+      }
+      content.timerID = setTimeout(closePopUp, autoclose_popup_time);
+    });
+  }
+  
   moreInfoEl.sizingTarget = scroll;
   moreInfoEl.large = large;
   moreInfoEl._page = "none"; // Display nothing by default
