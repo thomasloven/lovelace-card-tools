@@ -44,6 +44,47 @@ export function lovelace() {
   return null;
 }
 
+async function await_el(el) {
+  if(!el) return;
+  await customElements.whenDefined(el.localName);
+  if(el.updateComplete)
+    await el.updateComplete;
+}
+
+export async function async_lovelace_view() {
+  var root = document.querySelector("hc-main");
+  if(root) {
+    root = root && root.shadowRoot;
+    root = root && root.querySelector("hc-lovelace");
+    await_el(root);
+    root = root && root.shadowRoot;
+    root = root && root.querySelector("hui-view") || root.querySelector("hui-panel-view");
+    await_el(root);
+    return root;
+  }
+
+  root = document.querySelector("home-assistant");
+  await_el(root);
+  root = root && root.shadowRoot;
+  root = root && root.querySelector("home-assistant-main");
+  await_el(root);
+  root = root && root.shadowRoot;
+  root = root && root.querySelector("app-drawer-layout partial-panel-resolver");
+  await_el(root);
+  root = root && root.shadowRoot || root;
+  root = root && root.querySelector("ha-panel-lovelace");
+  await_el(root);
+  root = root && root.shadowRoot;
+  root = root && root.querySelector("hui-root");
+  await_el(root);
+  root = root && root.shadowRoot;
+  root = root && root.querySelector("ha-app-layout")
+  await_el(root);
+  root = root && root.querySelector("#view");
+  root = root && root.firstElementChild;
+  await_el(root);
+  return root;
+}
 export function lovelace_view() {
   var root = document.querySelector("hc-main");
   if(root) {
@@ -64,7 +105,8 @@ export function lovelace_view() {
   root = root && root.shadowRoot;
   root = root && root.querySelector("hui-root");
   root = root && root.shadowRoot;
-  root = root && root.querySelector("ha-app-layout #view");
+  root = root && root.querySelector("ha-app-layout")
+  root = root && root.querySelector("#view");
   root = root && root.firstElementChild;
   return root;
 }

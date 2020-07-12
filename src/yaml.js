@@ -1,6 +1,6 @@
-import {lovelace_view} from "./hass";
+import {async_lovelace_view} from "./hass";
 
-const yamlPromise = new Promise(resolve => {
+const yamlPromise = new Promise(async (resolve) => {
     document.querySelector("home-assistant").addEventListener("show-dialog", async(ev) => {
       ev.detail.dialogImport().then(() => {
         const dialog = document.querySelector("home-assistant").shadowRoot.querySelector("hui-dialog-edit-card");
@@ -10,7 +10,7 @@ const yamlPromise = new Promise(resolve => {
         });
       });
     }, {once: true});
-    lovelace_view()._addCard();
+    (await async_lovelace_view())._addCard();
   });
 
 export async function yaml2json(yaml) {
