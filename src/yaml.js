@@ -1,21 +1,24 @@
-import {async_lovelace_view} from "./hass";
+const _load_yaml2json = async () => {
+  if(customElements.get("developer-tools-event")) return;
 
-const yamlPromise = new Promise(async (resolve) => {
-    document.querySelector("home-assistant").addEventListener("show-dialog", async(ev) => {
-      ev.detail.dialogImport().then(() => {
-        const dialog = document.querySelector("home-assistant").shadowRoot.querySelector("hui-dialog-edit-card");
-        dialog.updateComplete.then(() =>{
-          dialog._close()
-          resolve();
-        });
-      });
-    }, {once: true});
-    (await async_lovelace_view())._addCard();
-  });
+  await customElements.whenDefined("partial-panel-resolver");
+  const ppr = document.createElement('partial-panel-resolver');
 
-export async function yaml2json(yaml) {
-    await yamlPromise;
-    const el = document.createElement("hui-card-editor");
-    el.yaml = yaml;
-    return el.value;
+  ppr.hass = {panels: [{
+    url_path: "tmp",
+    component_name: "developer-tools",
+  }]};
+  ppr._updateRoutes();
+
+  await ppr.routerOptions.routes.tmp.load()
+
+  await customElements.whenDefined("developer-tools-router");
+  const dtr = document.createElement("developer-tools-router");
+  await dtr.routerOptions.routes.event.load();
+}
+
+export const yaml2json = async (yaml) => {
+  await _load_yaml2json();
+  const el = document.createElement("developer-tools-event");
+  return el._computeParsedEventData(yaml);
 }
