@@ -47,15 +47,13 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
         }
 
         async _applyStyles() {
-          let el = await selectTree(this, "$ ha-dialog $ .");
+          let el = await selectTree(this, "$ ha-dialog");
+          customElements.whenDefined("card-mod").then(async () => {
           if(!el) return;
-          const styleEl = el && el.querySelector("style") || document.createElement("style");
-          el.appendChild(styleEl);
-          styleEl.innerHTML = `
-            .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
-              ${Object.keys(this._style).map((k) => { return `${k}: ${this._style[k]}`;})}
-            }
-          `;
+            const cm = customElements.get("card-mod");
+            cm.applyToElement(el, "more-info", this._style, {config: this._card}, [], false);
+          });
+
         }
 
         async showDialog(title, card, large=false, style={}, fullscreen=false) {
@@ -87,7 +85,6 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
               hideActions
               @ll-rebuild=${this._makeCard}
             >
-            <secret-element></secret-element>
             ${this.fullscreen
               ? html`<div slot="heading"></div>`
               : html`
@@ -109,13 +106,6 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
                 ${this.card}
               </div>
             </ha-dialog>
-            <style>
-              ha-dialog {
-                ${Object.keys(this._style).map((k) => {
-                  return html`${k}: ${this._style[k]};`;
-                })}
-              }
-            </style>
           `
         }
 
