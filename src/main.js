@@ -12,6 +12,7 @@ import { hasOldTemplate, parseOldTemplate } from "./old-templates.js";
 import { getData, areaByName, areaDevices, deviceByName, deviceEntities }  from "./devices";
 import { registerCard } from "./editor";
 import { yaml2json } from "./yaml";
+import { selectTree } from "./helpers";
 
 class CardTools {
 
@@ -62,6 +63,8 @@ class CardTools {
   static get registerCard() { return registerCard; }
 
   static get yaml2json() { return yaml2json; }
+
+  static get selectTree() { return selectTree; }
 }
 
 const pjson = require('../package.json');

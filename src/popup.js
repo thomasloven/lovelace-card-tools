@@ -1,13 +1,13 @@
 import { provideHass } from "./hass";
+import { selectTree } from "./helpers";
 import "./lovelace-element";
 
-export function closePopUp() {
+export async function closePopUp() {
   const root = document.querySelector("home-assistant") || document.querySelector("hc-root");
+  const el = await selectTree(root, "$ card-tools-popup");
 
-  if(!root || !root.shadowRoot || ! root.shadowRoot.querySelector("card-tools-popup")) return;
-
-  let el = root.shadowRoot.querySelector("card-tools-popup");
-  el.closeDialog();
+  if(el)
+    el.closeDialog();
 }
 
 export async function popUp(title, card, large=false, style={}, fullscreen=false) {
@@ -47,11 +47,8 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
         }
 
         async _applyStyles() {
-          await this.updateComplete;
-          let el = this.shadowRoot;
-          el = el && el.querySelector("ha-dialog");
-          await el.updateComplete;
-          el = el && el.shadowRoot;
+          let el = await selectTree(this, "$ ha-dialog $ .");
+          if(!el) return;
           const styleEl = el && el.querySelector("style") || document.createElement("style");
           el.appendChild(styleEl);
           styleEl.innerHTML = `
@@ -90,6 +87,7 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
               hideActions
               @ll-rebuild=${this._makeCard}
             >
+            <secret-element></secret-element>
             ${this.fullscreen
               ? html`<div slot="heading"></div>`
               : html`
@@ -194,9 +192,7 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
   const root = document.querySelector("home-assistant") || document.querySelector("hc-root");
 
   if(!root) return;
-  await root.updateComplete;
-
-  let el = root.shadowRoot.querySelector("card-tools-popup");
+  let el = await selectTree(root, "$ card-tools-popup");
   if(!el) {
     el = document.createElement("card-tools-popup");
     root.shadowRoot.appendChild(el);
