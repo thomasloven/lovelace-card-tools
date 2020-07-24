@@ -111,21 +111,21 @@ export function lovelace_view() {
   return root;
 }
 
-export function load_lovelace() {
+export async function load_lovelace() {
   if(customElements.get("hui-view")) return true;
 
-  const res = document.createElement("partial-panel-resolver");
-  res.hass = hass();
-  if(!res.hass || !res.hass.panels)
-    return false;
-  res.route = {path: "/lovelace/"};
-  res._updateRoutes();
-  try {
-    document.querySelector("home-assistant").appendChild(res);
-  } catch (error) {
-  } finally {
-    document.querySelector("home-assistant").removeChild(res);
-  }
-  if(customElements.get("hui-view")) return true;
-  return false;
+  await customElements.whenDefined("partial-panel-resolver");
+  const ppr = document.createElement("partial-panel-resolver");
+  ppr.hass = {panels: [{
+    url_path: "tmp",
+    "component_name": "lovelace",
+  }]};
+  ppr._updateRoutes();
+  await ppr.routerOptions.routes.tmp.load();
+  if(!customElements.get("ha-panel-lovelace")) return false;
+  const p = document.createElement("ha-panel-lovelace");
+  p.hass = hass();
+  p.panel = {config: {mode: null}};
+  p._fetchConfig();
+  return true;
 }

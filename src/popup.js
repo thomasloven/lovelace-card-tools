@@ -25,6 +25,7 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
           return {
             open: {},
             large: {reflect: true, type: Boolean},
+            hass: {},
           };
         }
 
