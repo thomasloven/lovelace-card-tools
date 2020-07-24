@@ -1,112 +1,237 @@
-import { fireEvent } from "./event";
 import { provideHass } from "./hass";
-import { createCard } from "./lovelace-element";
 import "./lovelace-element";
 
 export function closePopUp() {
-  const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
-  const moreInfoEl = root && root._moreInfoEl;
-  if(moreInfoEl)
-    moreInfoEl.close();
+  const root = document.querySelector("home-assistant") || document.querySelector("hc-root");
+
+  if(!root || !root.shadowRoot || ! root.shadowRoot.querySelector("card-tools-popup")) return;
+
+  let el = root.shadowRoot.querySelector("card-tools-popup");
+  el.closeDialog();
 }
 
-export function popUp(title, card, large=false, style=null, fullscreen=false) {
-  const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
-  // Force _moreInfoEl to be loaded
-  fireEvent("hass-more-info", {entityId: null}, root);
-  const moreInfoEl = root._moreInfoEl;
-  // Close and reopen to clear any previous styling
-  // Necessary for popups from popups
-  moreInfoEl.close();
-  moreInfoEl.open();
+export async function popUp(title, card, large=false, style={}, fullscreen=false) {
+  if(!customElements.get("card-tools-popup"))
+  {
+    const LitElement = customElements.get('home-assistant-main')
+      ? Object.getPrototypeOf(customElements.get('home-assistant-main'))
+      : Object.getPrototypeOf(customElements.get('hui-view'));
+    const html = LitElement.prototype.html;
+    const css = LitElement.prototype.css;
 
-  const oldContent = moreInfoEl.shadowRoot.querySelector("more-info-controls");
-  if(oldContent) oldContent.style['display'] = 'none';
+      class CardToolsPopup extends LitElement {
 
-  const wrapper = document.createElement("div");
-  wrapper.innerHTML = `
-  <style>
-    app-toolbar {
-      color: var(--more-info-header-color);
-      background-color: var(--more-info-header-background);
-    }
-    .scrollable {
-      overflow: auto;
-      max-width: 100% !important;
-    }
-  </style>
-  ${fullscreen
-    ? ``
-    : `
-      <app-toolbar>
-        <ha-icon-button
-          icon="hass:close"
-          dialog-dismiss=""
-          aria-label="Dismiss dialog"
-        ></ha-icon-button>
-        <div class="main-title" main-title="">
-          ${title}
-        </div>
-      </app-toolbar>
-      `
-    }
-    <div class="scrollable">
-    </div>
-  `;
+        static get properties() {
+          return {
+            open: {},
+            large: {reflect: true, type: Boolean},
+          };
+        }
 
-  const scroll = wrapper.querySelector(".scrollable");
-  const content = createCard(card);
-  provideHass(content);
-  scroll.appendChild(content);
+        updated(changedProperties) {
+          if(changedProperties.has("hass")) {
+            if(this.card)
+              this.card.hass = this.hass;
+          }
+        }
 
-  content.addEventListener(
-    "ll-rebuild",
-    (ev) => {
-      ev.stopPropagation();
-      const newContent = createCard(card);
-      provideHass(newContent);
-      scroll.replaceChild(newContent, content);
-    },
-    { once: true}
-  );
+        closeDialog() {
+          this.open = false;
+        }
 
-  moreInfoEl.sizingTarget = scroll;
-  moreInfoEl.large = large;
-  moreInfoEl._page = "none"; // Display nothing by default
-  moreInfoEl.shadowRoot.appendChild(wrapper);
+        async _makeCard() {
+          const helpers = await window.loadCardHelpers();
+          this.card = await helpers.createCardElement(this._card);
+          this.card.hass = this.hass;
+          this.requestUpdate();
+        }
 
-  let oldStyle = {};
-  if(style) {
-    moreInfoEl.resetFit(); // Reset positioning to enable setting it via css
-    for (var k in style) {
-      oldStyle[k] = moreInfoEl.style[k];
-      moreInfoEl.style.setProperty(k, style[k]);
-    }
+        async _applyStyles() {
+          await this.updateComplete;
+          let el = this.shadowRoot;
+          el = el && el.querySelector("ha-dialog");
+          await el.updateComplete;
+          el = el && el.shadowRoot;
+          const styleEl = el && el.querySelector("style") || document.createElement("style");
+          el.appendChild(styleEl);
+          styleEl.innerHTML = `
+            .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
+              ${Object.keys(this._style).map((k) => { return `${k}: ${this._style[k]}`;})}
+            }
+          `;
+        }
+
+        async showDialog(title, card, large=false, style={}, fullscreen=false) {
+          this.title = title;
+          this._card = card;
+          this.large = large;
+          this._style = style;
+          this.fullscreen = !!fullscreen;
+          this._makeCard();
+          await this.updateComplete;
+          this.open = true;
+          await this._applyStyles();
+        }
+
+        _enlarge() {
+          this.large = !this.large;
+        }
+
+        render() {
+          if(!this.open) {
+            return html``;
+          }
+
+          return html`
+            <ha-dialog
+              open
+              @closed=${this.closeDialog}
+              .heading=${true}
+              hideActions
+              @ll-rebuild=${this._makeCard}
+            >
+            ${this.fullscreen
+              ? html`<div slot="heading"></div>`
+              : html`
+                <app-toolbar slot="heading">
+                  <mwc-icon-button
+                    .label=${"dismiss"}
+                    dialogAction="cancel"
+                  >
+                    <ha-icon
+                      .icon=${"mdi:close"}
+                    ></ha-icon>
+                  </mwc-icon-button>
+                  <div class="main-title" @click=${this._enlarge}>
+                    ${this.title}
+                  </div>
+                </app-toolbar>
+              `}
+              <div class="content">
+                ${this.card}
+              </div>
+            </ha-dialog>
+            <style>
+              ha-dialog {
+                ${Object.keys(this._style).map((k) => {
+                  return html`${k}: ${this._style[k]};`;
+                })}
+              }
+            </style>
+          `
+        }
+
+        static get styles() {
+          return css`
+          ha-dialog {
+            --mdc-dialog-min-width: 400px;
+            --mdc-dialog-max-width: 600px;
+            --mdc-dialog-heading-ink-color: var(--primary-text-color);
+            --mdc-dialog-content-ink-color: var(--primary-text-color);
+            --justify-action-buttons: space-between;
+          }
+          @media all and (max-width: 450px), all and (max-height: 500px) {
+            ha-dialog {
+              --mdc-dialog-min-width: 100vw;
+              --mdc-dialog-max-width: 100vw;
+              --mdc-dialog-min-height: 100%;
+              --mdc-dialog-max-height: 100%;
+              --mdc-shape-medium: 0px;
+              --vertial-align-dialog: flex-end;
+            }
+          }
+
+          app-toolbar {
+            flex-shrink: 0;
+            color: var(--primary-text-color);
+            background-color: var(--secondary-background-color);
+          }
+
+          .main-title {
+            margin-left: 16px;
+            line-height: 1.3em;
+            max-height: 2.6em;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+          }
+          .content {
+            margin: -20px -24px;
+          }
+
+          @media all and (max-width: 450px), all and (max-height: 500px) {
+            app-toolbar {
+              background-color: var(--app-header-background-color);
+              color: var(--app-header-text-color, white);
+            }
+          }
+
+          @media all and (min-width: 451px) and (min-height: 501px) {
+            ha-dialog {
+              --mdc-dialog-max-width: 90vw;
+            }
+
+            .content {
+              width: 400px;
+            }
+            :host([large]) .content {
+              width: calc(90vw - 48px);
+            }
+
+            :host([large]) app-toolbar {
+              max-width: calc(90vw - 32px);
+            }
+          }
+          `;
+        }
+
+      }
+    customElements.define("card-tools-popup", CardToolsPopup);
   }
 
-  moreInfoEl._dialogOpenChanged = function(newVal) {
-    if (!newVal) {
-      if(this.stateObj)
-        this.fire("hass-more-info", {entityId: null});
+  const root = document.querySelector("home-assistant") || document.querySelector("hc-root");
 
-      if (this.shadowRoot == wrapper.parentNode) {
-        this._page = null;
-        this.shadowRoot.removeChild(wrapper);
+  if(!root) return;
+  await root.updateComplete;
 
-        const oldContent = this.shadowRoot.querySelector("more-info-controls");
-        if(oldContent) oldContent.style['display'] = "inline";
+  let el = root.shadowRoot.querySelector("card-tools-popup");
+  if(!el) {
+    el = document.createElement("card-tools-popup");
+    root.shadowRoot.appendChild(el);
+    provideHass(el);
+  }
 
-        if(style) {
-          moreInfoEl.resetFit();
-          for (var k in oldStyle)
-            if (oldStyle[k])
-              moreInfoEl.style.setProperty(k, oldStyle[k]);
-            else
-              moreInfoEl.style.removeProperty(k);
+  if(!window._moreInfoDialogListener) {
+    const listener = async (ev) => {
+      if(ev.state && "cardToolsPopup" in ev.state) {
+        if(ev.state.cardToolsPopup) {
+          const {title, card, large, style, fullscreen} = ev.state.params;
+          popUp(title, card, large, style, fullscreen)
+        } else {
+          el.closeDialog();
         }
       }
     }
+
+    window.addEventListener("popstate", listener);
+    window._moreInfoDialogListener = true;
   }
 
-  return moreInfoEl;
+  history.replaceState( {
+      cardToolsPopup: false,
+    },
+    ""
+  );
+
+  history.pushState( {
+      cardToolsPopup: true,
+      params: {title, card, large, style, fullscreen},
+    },
+    ""
+  );
+
+  el.showDialog(title, card, large, style, fullscreen);
+
 }
