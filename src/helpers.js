@@ -1,9 +1,10 @@
 async function _selectTree(root, path, all=false) {
   let el = root;
   if(typeof(path) === "string") {
-    path = path.split(/(?=\$)|(?<=\$)| /);
+    path = path.split(/(\$| )/);
   }
   for(const [i, p] of path.entries()) {
+    if(!p.trim().length) continue;
     if(!el) return null;
     if(el.localName && el.localName.includes("-"))
       await customElements.whenDefined(el.localName);
