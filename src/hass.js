@@ -125,6 +125,15 @@ export async function load_lovelace() {
   if(!customElements.get("ha-panel-lovelace")) return false;
   const p = document.createElement("ha-panel-lovelace");
   p.hass = hass();
+  if(p.hass === undefined) {
+    await new Promise(resolve => {
+      window.addEventListener('connection-status', (ev) => {
+        console.log(ev);
+        resolve();
+      }, {once: true});
+    });
+    p.hass = hass();
+  }
   p.panel = {config: {mode: null}};
   p._fetchConfig();
   return true;
