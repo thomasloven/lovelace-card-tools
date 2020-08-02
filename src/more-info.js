@@ -1,9 +1,10 @@
 import { fireEvent } from "./event";
+import { selectTree } from "./helpers";
 
-export function moreInfo(entity, large=false) {
+export async function moreInfo(entity, large=false) {
   const root = document.querySelector("hc-main") || document.querySelector("home-assistant");
   fireEvent("hass-more-info", {entityId: entity}, root);
-  const el = root._moreInfoEl;
+  const el = await selectTree(root, "$ ha-more-info-dialog");
   el.large = large;
   return el;
 }
