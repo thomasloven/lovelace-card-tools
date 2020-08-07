@@ -188,7 +188,11 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
   let el = await selectTree(root, "$ card-tools-popup");
   if(!el) {
     el = document.createElement("card-tools-popup");
-    root.shadowRoot.appendChild(el);
+    const mi = root.shadowRoot.querySelector("ha-more-info-dialog");
+    if(mi)
+      root.shadowRoot.insertBefore(el,mi);
+    else
+      root.shadowRoot.appendChild(el);
     provideHass(el);
   }
 
