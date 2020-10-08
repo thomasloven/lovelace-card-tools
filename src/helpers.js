@@ -3,6 +3,8 @@ async function _selectTree(root, path, all=false) {
   if(typeof(path) === "string") {
     path = path.split(/(\$| )/);
   }
+  if(path[path.length-1] === "")
+     path.pop();
   for(const [i, p] of path.entries()) {
     if(!p.trim().length) continue;
     if(!el) return null;

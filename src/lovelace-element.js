@@ -153,6 +153,6 @@ export function createEntityRow(config) {
   const domain = config.entity ? config.entity.split(".", 1)[0]: "none";
   return createLovelaceElement('entity-row', {
     type: DEFAULT_ROWS[domain] || "text",
-    ...config,
-    });
+    ...config
+  });
 }
