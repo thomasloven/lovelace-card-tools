@@ -26,7 +26,7 @@ export function hasTemplate(str) {
     return true;
 }
 
-export function subscribeRenderTemplate(conn, onChange, params) {
+export function subscribeRenderTemplate(conn, onChange, params, stringify=true) {
   // params = {template, entity_ids, variables}
   if(!conn)
     conn = hass().connection;
@@ -41,11 +41,15 @@ export function subscribeRenderTemplate(conn, onChange, params) {
 
   return conn.subscribeMessage(
     (msg) => {
-      let res = msg.result;
-      // Localize "_(key)" if found in template results
-      const localize_function = /_\([^)]*\)/g;
-      res = res.replace(localize_function, (key) => hass().localize(key.substring(2, key.length-1)) || key);
-      onChange(res)
+      if(stringify) {
+        let res = String(msg.result);
+        // Localize "_(key)" if found in template results
+        const localize_function = /_\([^)]*\)/g;
+        res = res.replace(localize_function, (key) => hass().localize(key.substring(2, key.length-1)) || key);
+        onChange(res);
+      } else {
+        onChange(msg.result);
+      }
     },
     { type: "render_template",
       template,
