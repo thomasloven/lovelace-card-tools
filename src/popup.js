@@ -96,7 +96,7 @@ export async function popUp(title, card, large=false, style={}, fullscreen=false
                     .label=${"dismiss"}
                     dialogAction="cancel"
                   >
-                    <ha-icon
+                    <ha-icon style="font-size: initial;"
                       .icon=${"mdi:close"}
                     ></ha-icon>
                   </mwc-icon-button>
