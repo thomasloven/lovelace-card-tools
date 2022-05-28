@@ -1,7 +1,7 @@
 card-tools version 2
 ====================
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 
 This is a collection of tools to simplify creating custom cards for [Home Assistant](https://home-assistant.io)
 
