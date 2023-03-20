@@ -1,11 +1,14 @@
 import { hass } from "./hass";
 
-const areaData = hass().callWS({type: "config/area_registry/list"});
-const deviceData = hass().callWS({type: "config/device_registry/list"});
-const entityData = hass().callWS({type: "config/entity_registry/list"});
+const _hass = hass();
 
-export async function getData(){
-    window.cardToolsData = window.cardToolsData || {
+export async function getData() {
+    // getData is lazy loaded for backwards compatibility
+    if (window.cardToolsData) return window.cardToolsData;
+    const areaData = _hass.callWS({type: "config/area_registry/list"});
+    const deviceData = _hass.callWS({type: "config/device_registry/list"});
+    const entityData = _hass.callWS({type: "config/entity_registry/list"});
+    window.cardToolsData = {
         areas: await areaData,
         devices: await deviceData,
         entities: await entityData,
@@ -13,43 +16,52 @@ export async function getData(){
     return window.cardToolsData;
 }
 
-getData();
-
 export function areaByName(name) {
-    const data = window.cardToolsData;
-    for(const a of data.areas) {
-        if(a.name.toLowerCase() === name.toLowerCase())
-            return a;
+    const hass = _hass;
+    const lowerName = name.toLowerCase();
+    const areaRegistry = hass.areas;
+
+    for(const area of Object.values(areaRegistry)) {
+        if(area.name.toLowerCase() === lowerName)
+            return area;
     }
     return null;
 }
 
 export function areaDevices(area) {
-    const data = window.cardToolsData;
+    const hass = _hass;
+    const deviceRegistry = hass.devices;
+
     let devices = [];
     if(!area) return devices;
-    for(const d of data.devices) {
-        if(d.area_id === area.area_id) {
-            devices.push(d);
+    for(const device of Object.values(deviceRegistry)) {
+        if(device.area_id === area.area_id) {
+            devices.push(device);
         }
     }
     return devices;
 }
+
 export function deviceByName(name) {
-    const data = window.cardToolsData;
-    for(const d of data.devices) {
-        if(d.name.toLowerCase() === name.toLowerCase())
-            return d;
+    const hass = _hass;
+    const lowerName = name.toLowerCase();
+    const deviceRegistry = hass.devices;
+    for(const device of Object.values(deviceRegistry)) {
+        if(device.name.toLowerCase() === lowerName)
+            return device;
     }
     return null;
 }
+
 export function deviceEntities(device) {
-    const data = window.cardToolsData;
+    const hass = _hass;
+    const entityRegistryForDisplay = hass.entities;
+
     let entities = [];
     if(!device) return entities;
-    for(const e of data.entities) {
-        if(e.device_id === device.id) {
-            entities.push(e.entity_id);
+    for(const entity of Object.values(entityRegistryForDisplay)) {
+        if(entity.device_id === device.id) {
+            entities.push(entity.entity_id);
         }
     }
     return entities;
