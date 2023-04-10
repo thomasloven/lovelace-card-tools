@@ -30,7 +30,7 @@ export function lovelace() {
   root = root && root.shadowRoot;
   root = root && root.querySelector("home-assistant-main");
   root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout partial-panel-resolver");
+  root = root && root.querySelector("ha-drawer partial-panel-resolver");
   root = root && root.shadowRoot || root;
   root = root && root.querySelector("ha-panel-lovelace")
   root = root && root.shadowRoot;
@@ -69,7 +69,7 @@ export async function async_lovelace_view() {
   root = root && root.querySelector("home-assistant-main");
   await_el(root);
   root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout partial-panel-resolver");
+  root = root && root.querySelector("ha-drawer partial-panel-resolver");
   await_el(root);
   root = root && root.shadowRoot || root;
   root = root && root.querySelector("ha-panel-lovelace");
@@ -99,7 +99,7 @@ export function lovelace_view() {
   root = root && root.shadowRoot;
   root = root && root.querySelector("home-assistant-main");
   root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout partial-panel-resolver");
+  root = root && root.querySelector("ha-drawer partial-panel-resolver");
   root = root && root.shadowRoot || root;
   root = root && root.querySelector("ha-panel-lovelace");
   root = root && root.shadowRoot;
